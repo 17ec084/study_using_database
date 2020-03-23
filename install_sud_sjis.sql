@@ -10,7 +10,7 @@ $cf$
         if command ~* ws_pattern_ws('表(?:「)?[^」]*(?:」)?を(?:(?:(?:作|造|創|(?:つく))る)|(?:作成(?:する)?))') then -- 表を作るコマンド
             table_id := SUD_get_new_table_id();
             table_name := substring(command from ws_pattern_ws('表(?:「)?([^」]*)(?:」)?を(?:(?:(?:作|造|創|(?:つく))る)|(?:作成(?:する)?))'));
-            execute 'create table SUD_'||table_id||'(data_id int, Q text, A text)';
+            execute 'create table SUD_'||table_id||'(data_id bigint, Q text, A text)';
             execute 
             $exe$
                 insert into SUD_table values($exe$||table_id||$exe$, '$exe$||table_name||$exe$') 
@@ -68,6 +68,7 @@ $cf$
             if table_id is null then raise exception '表「%」は存在しません。', table_name; end if;
             execute 'drop table SUD_'||table_id;
             execute 'delete from SUD_table where table_id = '||table_id;
+            raise notice '表「%」を削除しました', table_name
             return;
         else
             raise exception 'コマンドが認識できませんでした。';
