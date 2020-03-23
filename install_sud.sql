@@ -7,7 +7,7 @@ $cf$
         table_name text;
         data_id int; wanted_data_id int; Q text; A text;
     begin
-        if command ~ ws_pattern_ws('表(?:「)?[^」]*(?:」)?を(?:(?:(?:作|造|創|(?:つく))る)|(?:作成(?:する)?))') then -- 表を作るコマンド
+        if command ~* ws_pattern_ws('表(?:「)?[^」]*(?:」)?を(?:(?:(?:作|造|創|(?:つく))る)|(?:作成(?:する)?))') then -- 表を作るコマンド
             table_id := SUD_get_new_table_id();
             table_name := substring(command from ws_pattern_ws('表(?:「)?([^」]*)(?:」)?を(?:(?:(?:作|造|創|(?:つく))る)|(?:作成(?:する)?))'));
             execute 'create table SUD_'||table_id||'(data_id int, Q text, A text)';
